@@ -983,6 +983,38 @@ foreach(_compilerFlagName IN ITEMS "CMAKE_CXX_FLAGS" "CMAKE_C_FLAGS")
             -fPIC
             -Bsymbolic
       )
+    elseif("${IGC_OPTION__ARCHITECTURE_TARGET}" STREQUAL "LinuxLOONG")
+      igc_config_flag_apply_settings(
+          CompilerOptions
+          "${_compilerFlagName}"
+          ALL_PATTERN ""
+          SET_RAW
+            -pipe
+            -fmessage-length=0
+            -march=la64v1.0
+            -fms-extensions
+            -Werror
+            -Wno-unused-parameter
+            -Wno-missing-field-initializers
+            -Wwrite-strings
+            -Wno-long-long
+            -Wswitch
+            -Wno-sign-compare
+            -Wno-unused-result
+            -Wno-enum-compare
+            -Wno-type-limits
+            -Wno-ignored-qualifiers
+            -Wno-shadow
+            -Wformat
+            -Wformat-security
+            -Wno-extra
+            -Wno-write-strings
+            -finline
+            -fno-strict-aliasing
+            -Wno-unknown-pragmas
+            -fPIC
+            -Bsymbolic
+      )
     else()
     igc_config_flag_apply_settings(
         CompilerOptions

@@ -13,7 +13,7 @@ include_guard(DIRECTORY)
 # Detects host and target architecture.
 #
 # Currently supports: Windows32, Windows64, WindowsARM, Android32, Android64, AndroidMIPS, AndroidARM,
-#                     Linux32, Linux64, LinuxMIPS, LinuxRISCV, LinuxARM
+#                     Linux32, Linux64, LinuxMIPS, LinuxRISCV, LinuxARM, LinuxLoong
 #
 # @param targetArchVarName Name of variable placeholder for target architecture.
 # @param hostArchVarName   Name of variable placeholder for host architecture.
@@ -47,6 +47,8 @@ function(igc_arch_detect targetArchVarName hostArchVarName)
       set(_targetArchitecture "${_targetArchOS}MIPS")
     elseif(_cmakeTargetProcessor MATCHES "riscv64")
       set(_targetArchitecture "${_targetArchOS}RISCV")
+    elseif(_cmakeTargetProcessor MATCHES "loongarch64")
+      set(_targetArchitecture "${_targetArchOS}LOONG")
     else()
       set(_targetArchitecture "${_targetArchOS}ARM")
     endif()
@@ -84,6 +86,8 @@ function(igc_arch_detect targetArchVarName hostArchVarName)
       set(_hostArchitecture "${_hostArchOS}MIPS")
     elseif(_osArchitecture MATCHES "riscv64")
       set(_hostArchitecture "${_hostArchOS}RISCV")
+    elseif(_osArchitecture MATCHES "loongarch64")
+      set(_hostArchitecture "${_hostArchOS}LOONG")
     else()
       set(_hostArchitecture "${_hostArchOS}ARM")
     endif()
@@ -106,7 +110,7 @@ function(igc_arch_validate retVarName arch)
       "Windows32" "Windows64"               "WindowsARM"
       "Android32" "Android64" "AndroidMIPS" "AndroidARM"
       "Linux32"   "Linux64"   "LinuxMIPS"   "LinuxRISCV"
-      "LinuxARM"
+      "LinuxARM"  "LinuxLOONG"
     )
 
   list(FIND __allowedArchs "${arch}" _allowedArchIdx)
@@ -122,7 +126,7 @@ endfunction()
 # the "Unknown-NOTFOUND" will be returned.
 #
 # Currently supports: Windows32, Windows64, WindowsARM, Android32, Android64, AndroidMIPS, AndroidARM,
-#                     Linux32, Linux64, LinuxMIPS, LinuxRISCV, LinuxARM
+#                     Linux32, Linux64, LinuxMIPS, LinuxRISCV, LinuxARM, LinuxLoong
 #
 # @param retValName Name of variable placeholder where result will be returned.
 # @param arch       Architecture name to normalize / filter.
@@ -150,6 +154,8 @@ function(igc_arch_normalize retVarName arch)
     set(_cpuPart "RISCV")
   elseif(_arch MATCHES "arm|aarch64")
     set(_cpuPart "ARM")
+  elseif(_arch MATCHES "loong")
+    set(_cpuPart "LOONG")
   else()
     set("${retVarName}" "Unknown-NOTFOUND" PARENT_SCOPE)
     return()
